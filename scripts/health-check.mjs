@@ -101,18 +101,6 @@ try {
     }
   }
 
-  for (const skill of ['secure-key-entry', 'save-points', 'undo', 'safe-delete']) {
-    const skillFile = join(claude, 'skills', skill, 'SKILL.md')
-    try {
-      assertNoSymlinkPath(skillFile, `${skill} skill`)
-      if (!regular(skillFile, true) || !readFileSync(skillFile, 'utf8').includes(`name: ${skill}`)) {
-        fail(`safety skill missing: ${skill}. Run node "${join(ROOT, 'scripts', 'install-safety-skills.mjs')}"`)
-      }
-    } catch (error) {
-      fail(error.message)
-    }
-  }
-
   for (const name of ['CLAUDE.md', 'USER.md', 'SOUL.md']) {
     const contextFile = join(project, name)
     try {

@@ -16,7 +16,7 @@ Install the Web Designer agent and the two bundled local web-design skills from 
 Requirements:
 - Confirm Node.js 24 or newer.
 - Discover and record the absolute KIT_ROOT and separate absolute PROJECT_ROOT once.
-- Reuse the intended existing kit checkout. Do not clone or fetch other external GitHub sources, and do not use --extras. The one exception is the four safety skills (secure-key-entry, save-points, undo, safe-delete), which install-safety-skills.mjs downloads from their official repository.
+- Reuse the intended existing kit checkout. Do not clone, fetch external GitHub sources, or use --extras.
 - Preserve existing files by default. Use --upgrade only for previously managed files; keep customized files and write reviewable .candidate versions.
 - Do not replace CLAUDE.md, USER.md, or SOUL.md.
 - Pass every path flag as one quoted --key=value argument.
@@ -27,7 +27,6 @@ PROJECT_ROOT="$PWD"
 # have it, assign that exact checkout or extracted-archive path before continuing.
 : "${KIT_ROOT:?Set KIT_ROOT to the previously discovered absolute kit path}"
 node "$KIT_ROOT/scripts/install-web-designer-kit.mjs"
-node "$KIT_ROOT/scripts/install-safety-skills.mjs"
 node "$KIT_ROOT/scripts/health-check.mjs" "--project=$PROJECT_ROOT"
 
 Windows PowerShell:
@@ -36,7 +35,6 @@ $PROJECT_ROOT = (Get-Location).Path
 # extracted-archive location. If it is unset, assign that exact path first.
 if (-not $KIT_ROOT) { throw 'Set KIT_ROOT to the previously discovered absolute kit path.' }
 node (Join-Path $KIT_ROOT 'scripts/install-web-designer-kit.mjs')
-node (Join-Path $KIT_ROOT 'scripts/install-safety-skills.mjs')
 node (Join-Path $KIT_ROOT 'scripts/health-check.mjs') "--project=$PROJECT_ROOT"
 
 To pick up a newer kit release later, run node "$KIT_ROOT/scripts/update-kit.mjs" (or the PowerShell equivalent). It fast-forwards the kit checkout to the latest release and refreshes the installed agent and skills with --upgrade.

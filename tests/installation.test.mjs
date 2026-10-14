@@ -41,13 +41,6 @@ test('health evaluates actual installed core, then detects a missing file', () =
   assert.equal(installed.status, 0, installed.stderr)
   const context = run('install-context.mjs', [`--target=${project}`])
   assert.equal(context.status, 0, context.stderr)
-  const missingKeySkill = run('health-check.mjs', [`--claude-dir=${target}`, `--project=${project}`])
-  assert.notEqual(missingKeySkill.status, 0, 'Missing safety skills must fail health')
-  for (const skill of ['secure-key-entry', 'save-points', 'undo', 'safe-delete']) {
-    assert.match(missingKeySkill.stderr, new RegExp(`safety skill missing: ${skill}`))
-    mkdirSync(join(target, 'skills', skill), { recursive: true })
-    writeFileSync(join(target, 'skills', skill, 'SKILL.md'), `---\nname: ${skill}\n---\n`)
-  }
   const healthy = run('health-check.mjs', [`--claude-dir=${target}`, `--project=${project}`])
   assert.equal(healthy.status, 0, healthy.stdout + healthy.stderr)
   writeFileSync(join(target, 'agents', 'web-designer.md'), '')
