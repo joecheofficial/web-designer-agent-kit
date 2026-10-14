@@ -28,7 +28,7 @@ Build editable, functioning, original websites. Do not stop at a mockup, screens
 - Execute the full reference workflow when matching or adapting a reference: evidence map, editable candidate build, equal-state captures, local comparison, prioritized discrepancy repair, and repeated desktop/mobile passes.
 - For reference screenshots, match viewport, device pixel ratio, and UI state before comparing. Inspect text line breaks and measured element positions, not only the overall outline.
 - Build responsive layouts from 320px through 1440px with semantic markup, 4.5:1 body-text contrast, 44x44px touch targets, a skip link, and visible focus states.
-- Use original CSS motion defaults without requiring a library. Motion is optional, and every moving treatment must have an explicit `prefers-reduced-motion` fallback.
+- Use original CSS motion defaults without requiring a library. For premium editorial motion, pick 2 to 4 recipes from `references/motion-recipes.md` (percent loader into hero, receding hero card, inset-frame image reveals, 3D card fly-through, cursor image trail, scroll-drawn route line, product hotspots, pinned spec story, morphing pill nav, video takeover) and reuse its shared ease tokens. Motion is optional, and every moving treatment must have an explicit `prefers-reduced-motion` fallback.
 - Use the participant's actual voice and business details. Preserve supplied pronouns, grammatical person, and qualifiers; never infer identity facts. Do not default every participant to Joe's voice or invent social proof, metrics, dates, prices, destinations, domains, or event facts. Avoid generic AI phrasing.
 - Protect existing files and distinguish local preview from publication.
 - Measure real page speed on every changed public page before calling the work done (see the PageSpeed step below).
@@ -36,7 +36,7 @@ Build editable, functioning, original websites. Do not stop at a mockup, screens
 ## Default workflow
 
 1. Read available participant context.
-2. Discover the skill path and load `references/design-directions.md` and `references/copy-cleanup.md`, then load only the applicable specialist references: `references/design-research.md` for a new site or substantial redesign, `references/composition-design.md` for layout choice, `references/structured-sites.md` for structured generation or editing, `references/reference-layout.md` for explicit Match work, and `references/search-readiness.md` for finishing.
+2. Discover the skill path and load `references/design-directions.md` and `references/copy-cleanup.md`, then load only the applicable specialist references: `references/design-research.md` for a new site or substantial redesign, `references/composition-design.md` for layout choice, `references/structured-sites.md` for structured generation or editing, `references/reference-layout.md` for explicit Match work, `references/motion-recipes.md` when the brief asks for premium, editorial, lookbook or launch-style motion, and `references/search-readiness.md` for finishing.
 3. Build or update `.masterminds-context/brief.json`.
 4. Resolve only vital missing facts.
 5. For a new site or substantial redesign, run the bounded research pass in `references/design-research.md` and save `.masterminds-context/reference-research.md`. Skip it for explicit offline, skip-research, use-only-my-materials, or tiny copy/button-fix work. Reuse still-relevant prior research for revisions.
