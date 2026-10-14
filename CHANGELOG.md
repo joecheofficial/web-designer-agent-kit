@@ -8,6 +8,10 @@ kg:
 ---
 # Changelog
 
+## 5.4.0 (2026-10-14)
+
+- New `references/motion-recipes.md`: 11 editorial motion recipes plus a shared ease and duration vocabulary, distilled from a teardown of the Quechua SS25 lookbook. Each recipe has measured timings, mobile values and a reduced-motion path. The skill and agent load it when a brief asks for premium, lookbook or launch-style motion.
+
 ## 5.3.1 (2026-10-14)
 
 - The kit installs only the Web Designer again. The safety skills (secure-key-entry, save-points, undo, safe-delete) are their own package and are no longer installed, health-checked or referenced by this kit. This reverts the 5.3.0 additions.
