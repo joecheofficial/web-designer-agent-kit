@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "kitVersion": "5.1.1",
+  "kitVersion": "5.2.0",
   "status": "source_tests_passed",
-  "verificationStatus": "5.1.1 core Node tests rerun: 62 passed, 0 failed. Browser and research workflow evidence is inherited from5.1.0; fresh archive installation is recorded separately at release time.",
+  "verificationStatus": "5.2.0 core Node tests rerun: 66 passed, 0 failed (adds update-kit tests). Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
   "inheritedFromVersion": "5.1.0",
   "priorVersionEvidence": "docs/verification-v4.json",
   "coreNodeTests": {
-    "passed": 62,
+    "passed": 66,
     "failed": 0,
-    "observedKitVersion": "5.1.1",
+    "observedKitVersion": "5.2.0",
     "runtime": "Node 24"
   },
   "research": {
@@ -34,7 +34,7 @@
     "hashMismatchDominant": true
   },
   "editorImagePolicy": "Unsupported local formats rejected before writes with preservation and raster conversion guidance",
-  "scope": "5.1.1 version authority and packaging correction; unchanged design behavior retains explicitly inherited evidence.",
+  "scope": "5.2.0 agent guidance (PageSpeed step, project rule precedence, optional skills), update-kit script, prompts 10 and 11. Unchanged design tools retain explicitly inherited evidence.",
   "sectionsBrowser": {
     "captures": 108,
     "viewports": [
