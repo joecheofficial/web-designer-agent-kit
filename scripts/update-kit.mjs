@@ -3,7 +3,7 @@
 // --check only reports. Without --check it fast-forwards a clean git checkout of the
 // default branch, then reruns the installer with --upgrade (customized files stay safe).
 import { spawnSync } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, realpathSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { readKitVersion } from './lib/kit-state.mjs'
@@ -24,6 +24,17 @@ export function compareVersions(left, right) {
   return 0
 }
 
+// Parses `git ls-remote --tags` output into { tag: commitSha }, preferring peeled (^{}) commits.
+export function parseRemoteTags(output) {
+  const tags = {}
+  for (const line of String(output ?? '').split('\n')) {
+    const match = /^([0-9a-f]{40,64})\s+refs\/tags\/(.+?)(\^\{\})?$/.exec(line.trim())
+    if (!match) continue
+    if (match[3] || !tags[match[2]]) tags[match[2]] = match[1]
+  }
+  return tags
+}
+
 export function latestReleaseTag(tags) {
   const releases = tags.map(tag => tag.trim()).filter(tag => parseVersion(tag) && tag.startsWith('v'))
   releases.sort(compareVersions)
@@ -31,7 +42,8 @@ export function latestReleaseTag(tags) {
 }
 
 function git(root, args, timeout = 60000) {
-  const result = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8', timeout })
+  const env = { ...process.env, GIT_TERMINAL_PROMPT: '0', GCM_INTERACTIVE: 'never' }
+  const result = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8', timeout, env })
   return { ok: result.status === 0, out: (result.stdout ?? '').trim(), err: (result.stderr ?? '').trim() }
 }
 
@@ -53,15 +65,18 @@ export function inspectKit(root = ROOT) {
   if (!existsSync(join(root, '.git'))) {
     return { ...status, state: 'not-git', message: `This kit is not a git checkout. Download the latest release from ${RELEASES_URL} or clone https://github.com/josephtandle/web-designer-agent-kit.git to stay current automatically.` }
   }
-  const fetched = git(root, ['fetch', '--tags', '--quiet', 'origin'])
-  if (!fetched.ok) return { ...status, state: 'offline', message: `Could not reach the kit origin (${fetched.err || 'git fetch failed'}). Continuing with ${local}.` }
-  const tags = git(root, ['tag', '--list', 'v*'])
-  const latest = latestReleaseTag(tags.ok ? tags.out.split('\n') : [])
+  if (!parseVersion(local)) return { ...status, state: 'unknown-version', message: `Installed kit version ${local} is not a release version; update-kit leaves it unchanged.` }
+  const remote = git(root, ['ls-remote', '--tags', 'origin', 'refs/tags/v*'])
+  if (!remote.ok) return { ...status, state: 'offline', message: `Could not read releases from the kit origin (${remote.err || 'git ls-remote failed'}). Continuing with ${local}.` }
+  const remoteTags = parseRemoteTags(remote.out)
+  const latest = latestReleaseTag(Object.keys(remoteTags))
   if (!latest) return { ...status, state: 'no-releases', message: `No release tags found on origin. Continuing with ${local}.` }
   const latestVersion = latest.slice(1)
   const updateAvailable = compareVersions(local, latestVersion) < 0
   return {
     ...status,
+    latestTag: latest,
+    latestCommit: remoteTags[latest],
     latestVersion,
     updateAvailable,
     state: updateAvailable ? 'update-available' : 'current',
@@ -89,8 +104,15 @@ export function updateKit(root = ROOT, { claudeDir = null } = {}) {
     if (!dirty.ok || dirty.out) {
       return { ...before, updated: false, installed: false, state: 'blocked', message: 'Kit checkout has local changes to tracked files; nothing was overwritten. Commit or move them aside, then rerun update-kit.' }
     }
-    const pulled = git(root, ['merge', '--ff-only', `origin/${branch}`])
+    const fetched = git(root, ['fetch', '--quiet', '--no-tags', 'origin', `+refs/heads/${branch}:refs/remotes/origin/${branch}`])
+    if (!fetched.ok) return { ...before, updated: false, installed: false, state: 'offline', message: `Could not fetch ${branch} from the kit origin: ${fetched.err}` }
+    const onBranch = git(root, ['merge-base', '--is-ancestor', before.latestCommit, `origin/${branch}`])
+    if (!onBranch.ok) return { ...before, updated: false, installed: false, state: 'blocked', message: `Release ${before.latestTag} is not on origin/${branch} yet; nothing was changed.` }
+    const pulled = git(root, ['merge', '--ff-only', before.latestCommit])
     if (!pulled.ok) return { ...before, updated: false, installed: false, state: 'blocked', message: `Fast-forward failed: ${pulled.err}` }
+    if (readKitVersion(root) !== before.latestVersion) {
+      return { ...before, updated: false, installed: false, state: 'blocked', message: `After fast-forwarding to ${before.latestTag} the kit reports ${readKitVersion(root)}; the installer was not rerun.` }
+    }
   }
   const installerArgs = [join(root, 'scripts', 'install-web-designer-kit.mjs'), '--upgrade']
   if (claudeDir) installerArgs.push(`--claude-dir=${claudeDir}`)
@@ -108,7 +130,12 @@ export function updateKit(root = ROOT, { claudeDir = null } = {}) {
   }
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+function invokedDirectly() {
+  try { return Boolean(process.argv[1]) && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)) }
+  catch { return false }
+}
+
+if (invokedDirectly()) {
   let options
   try { options = parseArgs(process.argv.slice(2)) } catch (error) {
     console.error(`Error: ${error.message}`)
@@ -118,8 +145,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log('Usage: node update-kit.mjs [--check] [--json] [--claude-dir=DIR]\n--check reports whether a newer release exists. Without it, a clean checkout on its default branch is fast-forwarded and the installer reruns with --upgrade.')
     process.exit(0)
   }
-  const result = options.check ? inspectKit() : updateKit(ROOT, { claudeDir: options.claudeDir })
+  let result
+  try { result = options.check ? inspectKit() : updateKit(ROOT, { claudeDir: options.claudeDir }) }
+  catch (error) { result = { kitRoot: ROOT, state: 'error', message: `update-kit could not complete: ${error.message}` } }
   if (options.json) console.log(JSON.stringify(result, null, 2))
   else console.log(result.message)
-  process.exit(['install-failed', 'blocked'].includes(result.state) ? 1 : 0)
+  process.exit(['install-failed', 'blocked', 'error'].includes(result.state) ? 1 : 0)
 }

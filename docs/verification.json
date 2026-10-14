@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "kitVersion": "5.2.0",
   "status": "source_tests_passed",
-  "verificationStatus": "5.2.0 core Node tests rerun: 66 passed, 0 failed (adds update-kit tests). Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
+  "verificationStatus": "5.2.0 core Node tests rerun: 69 passed, 0 failed (adds update-kit tests). Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
   "inheritedFromVersion": "5.1.0",
   "priorVersionEvidence": "docs/verification-v4.json",
   "coreNodeTests": {
-    "passed": 66,
+    "passed": 69,
     "failed": 0,
     "observedKitVersion": "5.2.0",
     "runtime": "Node 24"
