@@ -8,6 +8,11 @@ kg:
 ---
 # Changelog
 
+## 5.3.0 (2026-10-14)
+
+- Safety skills: `scripts/install-safety-skills.mjs` installs the latest four safety skills, `secure-key-entry`, `save-points`, `undo`, and `safe-delete` (clone or pull `~/.secure-key-entry`, then its own installer). The health check confirms all four, and `update-kit.mjs` refreshes them.
+- Agent: never asks for API keys in chat (uses `secure-key-entry`), makes a save point before and after each real change (`save-points`), and deletes only through `safe-delete`.
+
 ## 5.2.0 (2026-10-14)
 
 - PageSpeed check: the Web Designer agent now measures every changed public page before calling the work done. It uses the `pagespeed` skill when installed and falls back to Google PageSpeed Insights or Lighthouse. Local-only previews are reported as not checked.

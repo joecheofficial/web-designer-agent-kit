@@ -15,7 +15,9 @@ const git = (cwd, ...args) => {
   assert.equal(result.status, 0, result.stderr)
   return result.stdout.trim()
 }
-const update = (kit, args) => spawnSync(process.execPath, [join(kit, 'scripts', 'update-kit.mjs'), ...args], { encoding: 'utf8', timeout: 60000 })
+// Keep the companion safety skills step offline and away from the real home directory.
+const offlineEnv = () => { const home = temp(); return { ...process.env, HOME: home, USERPROFILE: home, SECURE_KEY_ENTRY_REPO: join(tmpdir(), 'web-designer-no-such-secure-key-repo') } }
+const update = (kit, args) => spawnSync(process.execPath, [join(kit, 'scripts', 'update-kit.mjs'), ...args], { encoding: 'utf8', timeout: 60000, env: offlineEnv() })
 const setVersion = (dir, version) => {
   const file = join(dir, 'package.json')
   const value = JSON.parse(readFileSync(file, 'utf8'))
@@ -81,6 +83,7 @@ test('check reports a newer release and update fast-forwards then refreshes the 
   const done = JSON.parse(result.stdout)
   assert.equal(done.updated, true)
   assert.equal(done.installed, true)
+  assert.equal(done.safetySkills.ok, false, 'an unreachable companion repo is reported, never fatal')
   assert.equal(done.localVersion, '9.1.0')
   assert.match(readFileSync(join(claude, 'agents', 'web-designer.md'), 'utf8'), /Release 9\.1\.0 marker/)
   const manifest = JSON.parse(readFileSync(join(claude, 'masterminds-web-designer-kit.json'), 'utf8'))
