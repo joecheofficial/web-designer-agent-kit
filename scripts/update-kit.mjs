@@ -118,25 +118,14 @@ export function updateKit(root = ROOT, { claudeDir = null } = {}) {
   if (claudeDir) installerArgs.push(`--claude-dir=${claudeDir}`)
   const install = spawnSync(process.execPath, installerArgs, { encoding: 'utf8', timeout: 120000 })
   const localVersion = readKitVersion(root)
-  // Companion safety skills: always refresh them to their latest release. A failure here is
-  // reported but never blocks the kit update.
-  let safetySkills = null
-  const safetyInstaller = join(root, 'scripts', 'install-safety-skills.mjs')
-  if (install.status === 0 && existsSync(safetyInstaller)) {
-    const secureArgs = [safetyInstaller, '--json']
-    if (claudeDir) secureArgs.push(`--claude-dir=${claudeDir}`)
-    const secure = spawnSync(process.execPath, secureArgs, { encoding: 'utf8', timeout: 420000 })
-    try { safetySkills = JSON.parse(secure.stdout) } catch { safetySkills = { ok: false, state: 'error', message: (secure.stderr || 'safety skills install did not report a result').trim() } }
-  }
   return {
     ...before,
     localVersion,
     updated: before.updateAvailable,
     installed: install.status === 0,
-    safetySkills,
     state: install.status === 0 ? 'current' : 'install-failed',
     message: install.status === 0
-      ? `Kit ${localVersion} is active. ${(install.stdout ?? '').trim()}${safetySkills ? `\n${safetySkills.message}` : ''}`
+      ? `Kit ${localVersion} is active. ${(install.stdout ?? '').trim()}`
       : `Installer failed: ${(install.stderr ?? '').trim()}`,
   }
 }

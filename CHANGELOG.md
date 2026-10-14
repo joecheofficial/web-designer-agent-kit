@@ -8,6 +8,10 @@ kg:
 ---
 # Changelog
 
+## 5.3.1 (2026-10-14)
+
+- The kit installs only the Web Designer again. The safety skills (secure-key-entry, save-points, undo, safe-delete) are their own package and are no longer installed, health-checked or referenced by this kit. This reverts the 5.3.0 additions.
+
 ## 5.3.0 (2026-10-14)
 
 - Safety skills: `scripts/install-safety-skills.mjs` installs the latest four safety skills, `secure-key-entry`, `save-points`, `undo`, and `safe-delete` (clone or pull `~/.secure-key-entry`, then its own installer). The health check confirms all four, and `update-kit.mjs` refreshes them.
