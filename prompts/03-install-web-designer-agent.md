@@ -37,5 +37,7 @@ if (-not $KIT_ROOT) { throw 'Set KIT_ROOT to the previously discovered absolute 
 node (Join-Path $KIT_ROOT 'scripts/install-web-designer-kit.mjs')
 node (Join-Path $KIT_ROOT 'scripts/health-check.mjs') "--project=$PROJECT_ROOT"
 
+To pick up a newer kit release later, run node "$KIT_ROOT/scripts/update-kit.mjs" (or the PowerShell equivalent). It fast-forwards the kit checkout to the latest release and refreshes the installed agent and skills with --upgrade.
+
 Report installed and skipped files, whether the agent is ready, whether the three context files are present, and the next prompt.
 ```

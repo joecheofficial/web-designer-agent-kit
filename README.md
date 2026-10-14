@@ -6,15 +6,17 @@ kg:
   audience: team
   relations: {}
 ---
-# Web Designer Agent Kit 5.1.1
+# Web Designer Agent Kit
 
 Install Joe Che's starter context files, Web Designer agent, and original local design toolkit for Mastermind and All Sorted participants.
 
-Version 5.1 adds a bounded research-first workflow for new sites and substantial redesigns. It inspects a small set of relevant live references before direction selection, records provenance and observed-versus-inferred findings outside the public site, and verifies selected adaptations in the finished output. Explicit offline, skip-research, use-only-my-materials, and tiny-fix requests remain direct paths.
+Version 5.2 adds a PageSpeed check on every changed public page, a self-updating kit (`scripts/update-kit.mjs`), and two new prompts: Brand Brief First (Prompt 10) and Final Consistency Pass (Prompt 11). The current version is always the one in `package.json`; installs track the latest release, so no install step pins a version.
+
+Version 5.1 added a bounded research-first workflow for new sites and substantial redesigns. It inspects a small set of relevant live references before direction selection, records provenance and observed-versus-inferred findings outside the public site, and verifies selected adaptations in the finished output. Explicit offline, skip-research, use-only-my-materials, and tiny-fix requests remain direct paths.
 
 ## Quick start: one pasteable AI request
 
-Install Node.js 24 or newer, then download this kit once by cloning it or downloading a repository archive and extracting it into a local kit directory. Confirm that the extracted directory contains `scripts/`, `skills/`, and `agents/`. Internet access is required for the initial download and live-reference research. After download, the bundled scripts and UI tools work locally. An explicit offline request skips live-reference research, although a cloud-hosted AI model may still use a network.
+Install Node.js 24 or newer, then download this kit once by cloning it (recommended, so it can update itself) or by downloading the latest release archive from https://github.com/josephtandle/web-designer-agent-kit/releases/latest and extracting it into a local kit directory. Confirm that the extracted directory contains `scripts/`, `skills/`, and `agents/`. Internet access is required for the initial download and live-reference research. After download, the bundled scripts and UI tools work locally. An explicit offline request skips live-reference research, although a cloud-hosted AI model may still use a network.
 
 Open a terminal in the website project you want to build. Keep that project separate from the kit checkout. Then paste this request into your AI assistant:
 
@@ -83,6 +85,17 @@ node (Join-Path $KIT_ROOT 'scripts/preview.mjs') "--dir=$PROJECT_ROOT\my-service
 ```
 
 Every path flag is passed as one quoted `--key=value` argument so paths containing spaces remain intact. These commands do not assume the website project contains `scripts/`.
+
+## Staying on the latest release
+
+The documented install clones the default branch, which always holds the latest release, so there is no version to pin or bump. To pick up a newer release later, run one command from anywhere:
+
+```bash
+node "$KIT_ROOT/scripts/update-kit.mjs" --check   # report only
+node "$KIT_ROOT/scripts/update-kit.mjs"           # fast-forward the kit and refresh the installed agent and skills
+```
+
+PowerShell: `node (Join-Path $KIT_ROOT 'scripts/update-kit.mjs')`. The Web Designer agent runs the `--check` form at the start of each session and offers the update when a newer release exists. The update only fast-forwards a clean checkout on its default branch and reruns the installer with `--upgrade`, so customized files are kept and receive reviewable `.candidate` versions. An archive download cannot update itself; download the latest release again or switch to a clone. The installer records the kit location in `~/.claude/masterminds-web-designer-kit.json` as `kitRoot`.
 
 ## Bundled core tools and skills
 
@@ -164,8 +177,9 @@ URL fetch text is not visual evidence. Follow `skills/masterminds-web-designer/r
 6. For generated structured sites, offer the editor only as an opt-in. Run `edit-site.mjs --dir=SITE --port=INTEGER`, open only its exact printed private one-session URL, and verify text/image edits, save, undo, and reload. The editor owns validated `site.json` fields, never arbitrary HTML; external manual source changes are conflicts to preserve for review.
 7. Before audit, copy only participant-approved local images into the generated output. Remote images remain links and are not fetched automatically.
 8. Run `launch-check.mjs --dir=SITE --json` across the whole site. Fix hard failures, then manually inspect keyboard use, responsive behavior, form state, and performance. The check does not provide a ranking or guarantee SEO results.
-9. Report local preview separately from publication or deployment. Never claim a browser check that was not observed.
-10. Record final assembled machine-readable acceptance evidence in `docs/verification.json`. Until that file exists and is current, do not infer every check passes.
+9. Once a changed page is on a public URL, run a PageSpeed check on every changed public page: the `pagespeed` skill when installed, otherwise Google PageSpeed Insights or Lighthouse. Report mobile and desktop scores and the top three fixes, fix failed accessibility and SEO audits, and re-run to show before and after. A single lab run is never proof of a regression or a win.
+10. Report local preview separately from publication or deployment. Never claim a browser check that was not observed.
+11. Record final assembled machine-readable acceptance evidence in `docs/verification.json`. Until that file exists and is current, do not infer every check passes.
 
 See `docs/acceptance.md` for the concise acceptance rubric and `docs/three-upgrade-loops.md` for the feature-intention record.
 

@@ -154,6 +154,7 @@ try {
     pendingUpgrades,
     errors: [],
     extrasIncluded: false,
+    kitRoot: ROOT,
   }
   const stagedManifest = nextExclusivePath(`${manifestPath}.new`)
   writeExclusive(stagedManifest, `${JSON.stringify(state, null, 2)}\n`)
@@ -161,6 +162,7 @@ try {
 
   console.log(`Installed ${installedCount} kit files; pending upgrades: ${pendingUpgrades.length}.`)
   console.log(`Kit versions: current=${SOURCE_VERSION}; last completed=${lastCompletedVersion ?? 'none'}.`)
+  console.log(`Stay current: node "${join(ROOT, 'scripts', 'update-kit.mjs')}"`)
   if (prior?.kind === 'legacy') console.log('Migrated legacy manifest conservatively; existing files remain unmanaged.')
   if (options.extras) console.log('Extras catalog: bundled references only; no remote repositories were cloned.')
 } catch (error) {
