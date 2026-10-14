@@ -10,7 +10,9 @@ kg:
 
 Install Joe Che's starter context files, Web Designer agent, and original local design toolkit for Mastermind and All Sorted participants.
 
-Version 5.2 adds a PageSpeed check on every changed public page, a self-updating kit (`scripts/update-kit.mjs`), and two new prompts: Brand Brief First (Prompt 10) and Final Consistency Pass (Prompt 11). The current version is always the one in `package.json`; installs track the latest release, so no install step pins a version.
+Version 5.3 installs four free safety skills next to the Web Designer: `secure-key-entry` (API keys go into a private pop-up, never the chat), `save-points` (Git save points before and after each change), `undo` (go back to an earlier save point), and `safe-delete` (deletes go to the Trash or Recycle Bin). The health check confirms all four are present.
+
+Version 5.2 added a PageSpeed check on every changed public page, a self-updating kit (`scripts/update-kit.mjs`), and two new prompts: Brand Brief First (Prompt 10) and Final Consistency Pass (Prompt 11). The current version is always the one in `package.json`; installs track the latest release, so no install step pins a version.
 
 Version 5.1 added a bounded research-first workflow for new sites and substantial redesigns. It inspects a small set of relevant live references before direction selection, records provenance and observed-versus-inferred findings outside the public site, and verifies selected adaptations in the finished output. Explicit offline, skip-research, use-only-my-materials, and tiny-fix requests remain direct paths.
 
@@ -55,6 +57,7 @@ fi
 
 node "$KIT_ROOT/scripts/install-context.mjs" "--target=$PROJECT_ROOT"
 node "$KIT_ROOT/scripts/install-web-designer-kit.mjs"
+node "$KIT_ROOT/scripts/install-safety-skills.mjs"
 node "$KIT_ROOT/scripts/health-check.mjs" "--project=$PROJECT_ROOT"
 node "$KIT_ROOT/scripts/create-site.mjs" "--target=$PROJECT_ROOT/my-service-site" "--style=service" "--name=Apex Advisory" "--headline=Make the next decision clearer" "--email=contact@example.com"
 node "$KIT_ROOT/scripts/preview.mjs" "--dir=$PROJECT_ROOT/my-service-site" "--port=3000"
@@ -79,6 +82,7 @@ if (Test-Path (Join-Path $KIT_ROOT '.git')) {
 
 node (Join-Path $KIT_ROOT 'scripts/install-context.mjs') "--target=$PROJECT_ROOT"
 node (Join-Path $KIT_ROOT 'scripts/install-web-designer-kit.mjs')
+node (Join-Path $KIT_ROOT 'scripts/install-safety-skills.mjs')
 node (Join-Path $KIT_ROOT 'scripts/health-check.mjs') "--project=$PROJECT_ROOT"
 node (Join-Path $KIT_ROOT 'scripts/create-site.mjs') "--target=$PROJECT_ROOT\my-service-site" "--style=service" "--name=Apex Advisory" "--headline=Make the next decision clearer" "--email=contact@example.com"
 node (Join-Path $KIT_ROOT 'scripts/preview.mjs') "--dir=$PROJECT_ROOT\my-service-site" "--port=3000"
@@ -96,6 +100,10 @@ node "$KIT_ROOT/scripts/update-kit.mjs"           # fast-forward the kit and ref
 ```
 
 PowerShell: `node (Join-Path $KIT_ROOT 'scripts/update-kit.mjs')`. The Web Designer agent runs the `--check` form at the start of each session and offers the update when a newer release exists. The update only fast-forwards a clean checkout on its default branch and reruns the installer with `--upgrade`, so customized files are kept and receive reviewable `.candidate` versions. An archive download cannot update itself; download the latest release again or switch to a clone. The installer records the kit location in `~/.claude/masterminds-web-designer-kit.json` as `kitRoot`.
+
+## Safety skills
+
+The kit installs the four free [safety skills](https://github.com/josephtandle/secure-key-entry) alongside the Web Designer: `secure-key-entry`, `save-points`, `undo`, and `safe-delete`. `scripts/install-safety-skills.mjs` clones them into `~/.secure-key-entry` (or pulls the latest if they are already there) and runs their own installer, which places the skills in `~/.claude/skills` and `~/.agents/skills`. Your assistant then opens a private pop-up for API keys instead of asking in the chat, makes a save point before and after each change so you can undo, and sends deletes to the Trash or Recycle Bin. The health check fails until all four are present, and `update-kit.mjs` refreshes them every time it runs. Any skill you customized is copied to `~/.secure-key-entry-backups/` before it is replaced. Without git or internet access, download the repository as a ZIP, extract it, and run `scripts/install.sh` (Mac) or `scripts/install.ps1` (Windows) instead.
 
 ## Bundled core tools and skills
 
