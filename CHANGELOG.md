@@ -8,6 +8,10 @@ kg:
 ---
 # Changelog
 
+## 5.4.1 (2026-10-27)
+
+- Mobile video rule: hero and background video ships a separate small phone encode (about 480px, under 1.5 MB) chosen by viewport, so phones never download the desktop file; poster is the first paint, Save-Data and reduced motion load no video. Added to the agent and the motion-recipes performance notes. From the Joechella Friday page, where a 10.5 MB hero video held mobile LCP at about 6.5 s.
+
 ## 5.4.0 (2026-10-14)
 
 - New `references/motion-recipes.md`: 11 editorial motion recipes plus a shared ease and duration vocabulary, distilled from a teardown of the Quechua SS25 lookbook. Each recipe has measured timings, mobile values and a reduced-motion path. The skill and agent load it when a brief asks for premium, lookbook or launch-style motion.
