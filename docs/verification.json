@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kitVersion": "5.5.2",
   "status": "source_tests_passed",
-  "verificationStatus": "5.4.1 core Node tests rerun: 69 passed, 0 failed. Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
+  "verificationStatus": "5.5.2 core Node tests rerun: 80 passed, 0 failed. Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
   "inheritedFromVersion": "5.1.0",
   "priorVersionEvidence": "docs/verification-v4.json",
   "coreNodeTests": {
@@ -34,7 +34,7 @@
     "hashMismatchDominant": true
   },
   "editorImagePolicy": "Unsupported local formats rejected before writes with preservation and raster conversion guidance",
-  "scope": "5.4.1 adds the mobile video rule (documentation only, no script changes). 5.4.0 added the motion-recipes reference (documentation only, no script changes). 5.3.1 removed the 5.3.0 safety skills install and keeps the 5.2.0 PageSpeed step, update-kit and prompts 10 and 11. Unchanged design tools retain explicitly inherited evidence.",
+  "scope": "5.5.0 to 5.5.2 add the agent-readiness skill and scripts/agent-readiness.mjs (live probe plus Is Agentic scoring, with retries and unbuffered output), proven on six production sites at 100/100. 5.4.1 adds the mobile video rule (documentation only, no script changes). 5.4.0 added the motion-recipes reference (documentation only, no script changes). 5.3.1 removed the 5.3.0 safety skills install and keeps the 5.2.0 PageSpeed step, update-kit and prompts 10 and 11. Unchanged design tools retain explicitly inherited evidence.",
   "sectionsBrowser": {
     "captures": 108,
     "viewports": [
