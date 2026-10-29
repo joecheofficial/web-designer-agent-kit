@@ -8,6 +8,10 @@ kg:
 ---
 # Changelog
 
+## 5.5.2 (2026-10-29)
+
+- `scripts/agent-readiness.mjs` sets `process.exitCode` instead of calling `process.exit()`, so piped output (score and gap list) is no longer cut off.
+
 ## 5.5.1 (2026-10-29)
 
 - `scripts/agent-readiness.mjs` retries Is Agentic scans on network resets, connect timeouts and 429/5xx (honouring Retry-After) and explains the rate limit when it gives up.
