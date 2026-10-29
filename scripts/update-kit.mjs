@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url'
 import { readKitVersion } from './lib/kit-state.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-export const RELEASES_URL = 'https://github.com/josephtandle/web-designer-agent-kit/releases/latest'
+export const RELEASES_URL = 'https://github.com/joecheofficial/web-designer-agent-kit/releases/latest'
 
 export function parseVersion(value) {
   const match = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(String(value ?? '').trim())
@@ -63,7 +63,7 @@ export function inspectKit(root = ROOT) {
   const local = readKitVersion(root)
   const status = { kitRoot: root, localVersion: local, latestVersion: null, updateAvailable: false, state: 'unknown', message: '' }
   if (!existsSync(join(root, '.git'))) {
-    return { ...status, state: 'not-git', message: `This kit is not a git checkout. Download the latest release from ${RELEASES_URL} or clone https://github.com/josephtandle/web-designer-agent-kit.git to stay current automatically.` }
+    return { ...status, state: 'not-git', message: `This kit is not a git checkout. Download the latest release from ${RELEASES_URL} or clone https://github.com/joecheofficial/web-designer-agent-kit.git to stay current automatically.` }
   }
   if (!parseVersion(local)) return { ...status, state: 'unknown-version', message: `Installed kit version ${local} is not a release version; update-kit leaves it unchanged.` }
   const remote = git(root, ['ls-remote', '--tags', 'origin', 'refs/tags/v*'])

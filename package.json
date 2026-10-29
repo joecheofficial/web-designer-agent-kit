@@ -1,6 +1,6 @@
 {
   "name": "web-designer-agent-kit",
-  "version": "5.4.1",
+  "version": "5.5.0",
   "private": false,
   "type": "module",
   "engines": {

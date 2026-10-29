@@ -8,6 +8,12 @@ kg:
 ---
 # Changelog
 
+## 5.5.0 (2026-10-29)
+
+- New bundled `agent-readiness` skill: a post-launch "agentic check and rebuild" loop that makes a live site readable and usable by AI agents and scores it on Is Agentic (is-agentic.com). It covers Markdown content negotiation, Markdown 404s, `llms.txt` when-to-use guidance, trust pages, Organization schema, Link headers and an agent-skills index, plus OpenAPI, JSON errors, pagination and rate-limit headers for sites with an API. Recipes for Next.js, static HTML on Vercel and Cloudflare are in `skills/agent-readiness/references/fix-recipes.md`.
+- New `scripts/agent-readiness.mjs`: probes a public URL directly and, with `--scan`, runs a fresh Is Agentic scan scored with the report's own formula, listing every gap in priority order.
+- The web designer offers agent readiness only after launch (agent step 14, skill step 13), never during the first build. Proven on mastermindshq.business (65 to 100) and getallsorted.ai (77 to 100).
+
 ## 5.4.1 (2026-10-27)
 
 - Mobile video rule: hero and background video ships a separate small phone encode (about 480px, under 1.5 MB) chosen by viewport, so phones never download the desktop file; poster is the first paint, Save-Data and reduced motion load no video. Added to the agent and the motion-recipes performance notes. From the Joechella Friday page, where a 10.5 MB hero video held mobile LCP at about 6.5 s.

@@ -27,6 +27,7 @@ Use this skill for new websites and existing-site updates. Deliver a working edi
 10. Run the read-only local SEO audit with `node "$KIT_ROOT/scripts/seo-check.mjs" "--file=$PROJECT_ROOT/<site>/index.html" --json`. Fix confirmed local failures and rerun it. Add `"--url=<verified-public-URL>"` only when that URL has been verified.
 11. Run the whole-site launch check, then use the bounded browser acceptance loop in `references/composition-design.md` at 320/390/768/1440. Verify selected research adaptations in the real output and log implementations or deviations in `reference-research.md`. Verify image geometry and clipping, settled and reduced-motion states, real CTA hit testing plus keyboard activation, and equal-state reference geometry. Repeat after long-copy tests and revisions. Hard failures are must-fix issues, not scores; if browser access is unavailable, report the browser checks as blocked.
 12. Start a working local preview and report what was observed, what remains uncertain, and that preview is not publication. Offer the structured visual editor only as an opt-in for generated `site.json` sites.
+13. Agent readiness, post-launch only. Once the site is live on a verified public URL and its SEO, launch and PageSpeed checks pass, offer once to make it agent ready; never during the first build. On yes, or when asked for an agent or Is Agentic check, load the bundled `agent-readiness` skill and run its check-and-rebuild loop with `node "$KIT_ROOT/scripts/agent-readiness.mjs" "--url=<public URL>" --scan` until the score is 100 or only owner-held items remain.
 
 Run every kit script from the discovered absolute kit root with explicit absolute project targets. Do not use naked `scripts/...` paths from a participant project. Pass each path option as one quoted `--key=value` argument.
 
@@ -43,6 +44,7 @@ Run every kit script from the discovered absolute kit root with explicit absolut
 - **Reference Layout Guide:** observed-versus-inferred mapping, editable candidate builds, equal-state captures, local comparison, discrepancy repair, and repeated desktop/mobile passes.
 - **Copy Cleanup Guide:** safe visible-prose editing with before/after examples and a protected-facts check.
 - **Search Readiness Guide:** built-in SEO and GEO guidance, local audit interpretation, and explicit boundaries between local evidence and live checks.
+- **Agent Readiness skill:** post-launch Markdown for agents, agent-friendly 404s, `llms.txt` when-to-use guidance, trust pages, Organization schema and, for sites with an API, OpenAPI and JSON errors, scored with `scripts/agent-readiness.mjs` against Is Agentic.
 
 The core workflow uses local tools and original CSS. No external library, remote skill, or external GitHub fetch is required. The source catalog is research-only by default. URL capture and a cloud-hosted model may use a network.
 
@@ -54,7 +56,7 @@ The core workflow uses local tools and original CSS. No external library, remote
 - Add a canonical URL only for a verified public domain. Without one, omit deployment-dependent URL metadata and leave a launch TODO.
 - Keep structured data consistent with visible facts. Never invent Event dates, metrics, ratings, addresses, prices, or availability.
 - Make entity identity clear, answer useful audience questions directly, and use verifiable facts. Do not promise rankings, indexing, AI-answer inclusion, or citations.
-- Do not require `llms.txt` or special AI schema. Use accurate visible content and structured data that matches it.
+- Do not require `llms.txt` or special AI schema for the first build. Use accurate visible content and structured data that matches it. The post-launch agent-readiness step adds them once the site is live.
 - Treat the local SEO audit as evidence only for the file and optional verified URL actually checked. Unless separately observed, report `live_http: not_checked`, `robots: not_checked`, `indexing: not_checked`, and `ai_citations: not_checked`.
 - Treat a form as connected only when it has a real endpoint and the user has confirmed send intent. Never fake a form with `action="#"`, `contenteditable`, or a navigation link styled as submission.
 - Mark local demo forms as unconnected and prevent accidental submission. Keep navigation and verified contact links separate.
