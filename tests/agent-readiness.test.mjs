@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { readFileSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
 import { parseScanStream, probe, runScan, scoreScan } from '../scripts/agent-readiness.mjs'
 
 const check = (id, status, extra = {}) => ({ id, name: id, status, details: `${id} ${status}`, ...extra })
@@ -116,4 +117,12 @@ test('runScan retries network failures and busy responses, then succeeds', async
 test('runScan gives a clear error after the last retry', async () => {
   const fetchImpl = async () => { throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } }) }
   await assert.rejects(runScan('https://example.com', { fetchImpl, waitMs: 1, attempts: 2 }), /after 2 tries \(ECONNRESET\)/)
+})
+
+test('CLI output is never cut off when piped', () => {
+  const script = new URL('../scripts/agent-readiness.mjs', import.meta.url).pathname
+  const run = spawnSync(process.execPath, [script, '--help'], { encoding: 'utf8' })
+  assert.equal(run.status, 0)
+  assert.match(run.stdout, /Usage: node scripts\/agent-readiness\.mjs/)
+  assert.doesNotMatch(readFileSync(script, 'utf8'), /process\.exit\(/)
 })

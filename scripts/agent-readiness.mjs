@@ -256,5 +256,6 @@ async function main() {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
-  main().then((code) => process.exit(code), (error) => { console.error(`Error: ${error.message}`); process.exit(1) })
+  // exitCode, not exit(): exit() can cut off output that is still flushing to a pipe.
+  main().then((code) => { process.exitCode = code }, (error) => { console.error(`Error: ${error.message}`); process.exitCode = 1 })
 }
