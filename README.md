@@ -16,7 +16,7 @@ Version 5.1 added a bounded research-first workflow for new sites and substantia
 
 ## Quick start: one pasteable AI request
 
-Install Node.js 24 or newer, then download this kit once by cloning it (recommended, so it can update itself) or by downloading the latest release archive from https://github.com/josephtandle/web-designer-agent-kit/releases/latest and extracting it into a local kit directory. Confirm that the extracted directory contains `scripts/`, `skills/`, and `agents/`. Internet access is required for the initial download and live-reference research. After download, the bundled scripts and UI tools work locally. An explicit offline request skips live-reference research, although a cloud-hosted AI model may still use a network.
+Install Node.js 24 or newer, then download this kit once by cloning it (recommended, so it can update itself) or by downloading the latest release archive from https://github.com/joecheofficial/web-designer-agent-kit/releases/latest and extracting it into a local kit directory. Confirm that the extracted directory contains `scripts/`, `skills/`, and `agents/`. Internet access is required for the initial download and live-reference research. After download, the bundled scripts and UI tools work locally. An explicit offline request skips live-reference research, although a cloud-hosted AI model may still use a network.
 
 Open a terminal in the website project you want to build. Keep that project separate from the kit checkout. Then paste this request into your AI assistant:
 
@@ -50,7 +50,7 @@ elif [ -e "$KIT_ROOT" ]; then
   echo "KIT_ROOT exists but is not the expected git checkout. Set KIT_ROOT to the extracted kit or choose another directory."
   exit 1
 else
-  git clone https://github.com/josephtandle/web-designer-agent-kit.git "$KIT_ROOT"
+  git clone https://github.com/joecheofficial/web-designer-agent-kit.git "$KIT_ROOT"
 fi
 
 node "$KIT_ROOT/scripts/install-context.mjs" "--target=$PROJECT_ROOT"
@@ -74,7 +74,7 @@ if (Test-Path (Join-Path $KIT_ROOT '.git')) {
 } elseif (Test-Path $KIT_ROOT) {
   throw 'KIT_ROOT exists but is not the expected git checkout. Set KIT_ROOT to the extracted kit or choose another directory.'
 } else {
-  git clone https://github.com/josephtandle/web-designer-agent-kit.git $KIT_ROOT
+  git clone https://github.com/joecheofficial/web-designer-agent-kit.git $KIT_ROOT
 }
 
 node (Join-Path $KIT_ROOT 'scripts/install-context.mjs') "--target=$PROJECT_ROOT"
@@ -112,6 +112,7 @@ Once downloaded, the local tools and generation, installation, preview, and copy
 - **Section Gallery:** `scripts/section-gallery.mjs`, which creates an offline chooser with 36 section layouts and 3 complete example compositions
 - **Structured Sites:** `skills/masterminds-web-designer/references/structured-sites.md`, with the generated-site, editor, whole-site audit, copy-review, capture, asset, and palette handoff contracts
 - **Search Readiness:** `skills/masterminds-web-designer/references/search-readiness.md`, with built-in SEO and GEO guidance plus honest local-versus-live reporting
+- **Agent Readiness:** `skills/agent-readiness`, a post-launch agentic check-and-rebuild loop scored on Is Agentic with `scripts/agent-readiness.mjs --url=<public URL> --scan`
 
 The GitHub design research catalog at `docs/github-design-research.md` is research-only in the default workflow. It does not fetch, install, clone, or vendor external repositories.
 
@@ -185,4 +186,4 @@ See `docs/acceptance.md` for the concise acceptance rubric and `docs/three-upgra
 
 ## Release authority
 
-MyOS is the authoritative release source for this toolkit. Normal releases edit this MyOS toolkit and use the release export helper to create an outward portable copy only after its preflight passes. `sync-toolkit.mjs` remains an explicit legacy import and migration tool for reviewing an external source. It is not a normal release path and must not select the source for a MyOS release.
+The public GitHub repository https://github.com/joecheofficial/web-designer-agent-kit is the single source for this kit. Every change lands here first and ships as a tagged GitHub release; participants clone it or download the latest release. Downstream copies, such as the MyOS toolkit at `agents/web-designer/toolkit` and the All Sorted web-designer module, are refreshed from a tagged release and are never edited directly. `sync-toolkit.mjs` is a legacy import tool, not a release path.

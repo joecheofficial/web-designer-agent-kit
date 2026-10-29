@@ -7,6 +7,8 @@ export const KIT_NAME = 'web-designer-agent-kit'
 export const MANIFEST_SCHEMA_VERSION = 2
 export const REQUIRED_ASSETS = [
   'agents/web-designer.md',
+  'skills/agent-readiness/SKILL.md',
+  'skills/agent-readiness/references/fix-recipes.md',
   'skills/frontend-design/SKILL.md',
   'skills/masterminds-web-designer/SKILL.md',
   'skills/masterminds-web-designer/tools/component-lab.html',
