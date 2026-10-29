@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "kitVersion": "5.4.1",
+  "kitVersion": "5.5.2",
   "status": "source_tests_passed",
   "verificationStatus": "5.4.1 core Node tests rerun: 69 passed, 0 failed. Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
   "inheritedFromVersion": "5.1.0",
@@ -8,7 +8,7 @@
   "coreNodeTests": {
     "passed": 69,
     "failed": 0,
-    "observedKitVersion": "5.4.1",
+    "observedKitVersion": "5.5.2",
     "runtime": "Node 24"
   },
   "research": {
