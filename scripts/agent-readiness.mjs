@@ -129,15 +129,32 @@ export function parseScanStream(text) {
   return result
 }
 
-export async function runScan(origin, { force = true, fetchImpl = fetch } = {}) {
+export async function runScan(origin, { force = true, fetchImpl = fetch, attempts = 3, waitMs = 20000 } = {}) {
   const url = new URL('/api/scan/stream', IS_AGENTIC)
   url.searchParams.set('target', origin)
   if (force) url.searchParams.set('force', '1')
-  const res = await fetchImpl(url, { headers: { Accept: 'text/event-stream', 'Cache-Control': 'no-store', 'User-Agent': UA } })
-  if (!res.ok) throw new Error(`Is Agentic scan failed to start: HTTP ${res.status}${res.headers.get('retry-after') ? `, retry after ${res.headers.get('retry-after')}s` : ''}`)
-  const result = parseScanStream(await res.text())
-  if (!result) throw new Error('Is Agentic scan finished without a result')
-  return result
+  let lastError
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const res = await fetchImpl(url, { headers: { Accept: 'text/event-stream', 'Cache-Control': 'no-store', 'User-Agent': UA } })
+      if (res.status === 429 || res.status >= 500) {
+        lastError = new Error(`Is Agentic is busy: HTTP ${res.status}`)
+        const retryAfter = Number(res.headers.get('retry-after'))
+        if (attempt < attempts) await new Promise((r) => setTimeout(r, retryAfter > 0 ? retryAfter * 1000 : waitMs * attempt))
+        continue
+      }
+      if (!res.ok) throw new Error(`Is Agentic scan failed to start: HTTP ${res.status}`)
+      const result = parseScanStream(await res.text())
+      if (!result) throw new Error('Is Agentic scan finished without a result')
+      return result
+    } catch (error) {
+      // Network blips and throttling (resets, connect timeouts) are common; HTTP errors above are final.
+      if (/scan failed to start|without a result/.test(error.message)) throw error
+      lastError = error
+      if (attempt < attempts) await new Promise((r) => setTimeout(r, waitMs * attempt))
+    }
+  }
+  throw new Error(`Could not reach Is Agentic after ${attempts} tries (${lastError?.cause?.code ?? lastError?.message}). Wait a few minutes and retry; scans are rate limited.`)
 }
 
 // ---- Direct probe: what the site serves right now ----

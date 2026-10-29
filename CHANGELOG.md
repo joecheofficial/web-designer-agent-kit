@@ -8,6 +8,10 @@ kg:
 ---
 # Changelog
 
+## 5.5.1 (2026-10-29)
+
+- `scripts/agent-readiness.mjs` retries Is Agentic scans on network resets, connect timeouts and 429/5xx (honouring Retry-After) and explains the rate limit when it gives up.
+
 ## 5.5.0 (2026-10-29)
 
 - New bundled `agent-readiness` skill: a post-launch "agentic check and rebuild" loop that makes a live site readable and usable by AI agents and scores it on Is Agentic (is-agentic.com). It covers Markdown content negotiation, Markdown 404s, `llms.txt` when-to-use guidance, trust pages, Organization schema, Link headers and an agent-skills index, plus OpenAPI, JSON errors, pagination and rate-limit headers for sites with an API. Recipes for Next.js, static HTML on Vercel and Cloudflare are in `skills/agent-readiness/references/fix-recipes.md`.

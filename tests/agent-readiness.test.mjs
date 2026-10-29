@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { readFileSync } from 'node:fs'
-import { parseScanStream, probe, scoreScan } from '../scripts/agent-readiness.mjs'
+import { parseScanStream, probe, runScan, scoreScan } from '../scripts/agent-readiness.mjs'
 
 const check = (id, status, extra = {}) => ({ id, name: id, status, details: `${id} ${status}`, ...extra })
 const scan = (checks, extra = {}) => ({ domain: 'example.com', layers: [{ id: 'l', checks }], ...extra })
@@ -98,4 +98,22 @@ test('the web designer only offers agent readiness after launch', () => {
   assert.match(agent, /Never raise this during the first build/)
   assert.match(skill, /^---\nname: agent-readiness\n/)
   assert.match(skill, /Not on the first build/)
+})
+
+test('runScan retries network failures and busy responses, then succeeds', async () => {
+  const result = scan([check('agent-friendly-404', 'pass')])
+  let calls = 0
+  const fetchImpl = async () => {
+    calls++
+    if (calls === 1) throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'UND_ERR_CONNECT_TIMEOUT' } })
+    if (calls === 2) return new Response('busy', { status: 429 })
+    return new Response(`data: ${JSON.stringify({ type: 'scan_complete', result })}\n\n`, { status: 200 })
+  }
+  assert.deepEqual(await runScan('https://example.com', { fetchImpl, waitMs: 1 }), result)
+  assert.equal(calls, 3)
+})
+
+test('runScan gives a clear error after the last retry', async () => {
+  const fetchImpl = async () => { throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } }) }
+  await assert.rejects(runScan('https://example.com', { fetchImpl, waitMs: 1, attempts: 2 }), /after 2 tries \(ECONNRESET\)/)
 })
