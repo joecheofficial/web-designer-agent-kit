@@ -10,6 +10,8 @@ kg:
 
 Install Joe Che's starter context files, Web Designer agent, and original local design toolkit for Mastermind and All Sorted participants.
 
+Version 5.6 adds Google Chrome's Modern Web Guidance: the designer reads the current rulebook before writing site code, and a read-only "check my site" scan explains outdated code in plain words (Prompt 12). It needs Node.js 22 or newer and skips cleanly otherwise.
+
 Version 5.2 adds a PageSpeed check on every changed public page, a self-updating kit (`scripts/update-kit.mjs`), and two new prompts: Brand Brief First (Prompt 10) and Final Consistency Pass (Prompt 11). The current version is always the one in `package.json`; installs track the latest release, so no install step pins a version.
 
 Version 5.1 added a bounded research-first workflow for new sites and substantial redesigns. It inspects a small set of relevant live references before direction selection, records provenance and observed-versus-inferred findings outside the public site, and verifies selected adaptations in the finished output. Explicit offline, skip-research, use-only-my-materials, and tiny-fix requests remain direct paths.
@@ -97,6 +99,16 @@ node "$KIT_ROOT/scripts/update-kit.mjs"           # fast-forward the kit and ref
 
 PowerShell: `node (Join-Path $KIT_ROOT 'scripts/update-kit.mjs')`. The Web Designer agent runs the `--check` form at the start of each session and offers the update when a newer release exists. The update only fast-forwards a clean checkout on its default branch and reruns the installer with `--upgrade`, so customized files are kept and receive reviewable `.candidate` versions. An archive download cannot update itself; download the latest release again or switch to a clone. The installer records the kit location in `~/.claude/masterminds-web-designer-kit.json` as `kitRoot`.
 
+## Check my site (Modern Web Guidance)
+
+Scan any website folder for outdated code, read-only, with each finding explained in plain words:
+
+```bash
+node "$KIT_ROOT/scripts/modern-web.mjs" check "--dir=$PROJECT_ROOT/my-service-site"
+```
+
+PowerShell: `node (Join-Path $KIT_ROOT 'scripts/modern-web.mjs') check "--dir=$PROJECT_ROOT\my-service-site"`. The first run downloads the pinned `modern-web-guidance@1.0.1` package from npm; it needs Node.js 22 or newer and skips with a plain note on older Node. Nothing is changed by the check. Or paste Prompt 12 (`prompts/12-check-my-site.md`) and the Web Designer explains and fixes only what you approve.
+
 ## Bundled core tools and skills
 
 Once downloaded, the local tools and generation, installation, preview, and copy-review scripts need no additional network access. Live-reference research and URL capture require internet access unless an explicit offline request skips live research. Playwright is optional and installed separately only when that capture route is chosen.
@@ -112,6 +124,7 @@ Once downloaded, the local tools and generation, installation, preview, and copy
 - **Section Gallery:** `scripts/section-gallery.mjs`, which creates an offline chooser with 36 section layouts and 3 complete example compositions
 - **Structured Sites:** `skills/masterminds-web-designer/references/structured-sites.md`, with the generated-site, editor, whole-site audit, copy-review, capture, asset, and palette handoff contracts
 - **Search Readiness:** `skills/masterminds-web-designer/references/search-readiness.md`, with built-in SEO and GEO guidance plus honest local-versus-live reporting
+- **Modern Web Guidance:** `scripts/modern-web.mjs`, Google Chrome's up-to-date rulebook for website code (kept by the Chrome, Edge, Firefox and MDN teams). The designer looks up the current guide before writing a component (`search "<task>"`, then `retrieve <id>`), and `check "--dir=<site>"` is a read-only scan for outdated code explained in plain words. Pinned to `modern-web-guidance@1.0.1`, fetched from npm once, telemetry off, Node.js 22 or newer; it skips cleanly otherwise. See `skills/masterminds-web-designer/references/modern-web-guidance.md` and `THIRD-PARTY-NOTICES.md`.
 - **Agent Readiness:** `skills/agent-readiness`, a post-launch agentic check-and-rebuild loop scored on Is Agentic with `scripts/agent-readiness.mjs --url=<public URL> --scan`
 
 The GitHub design research catalog at `docs/github-design-research.md` is research-only in the default workflow. It does not fetch, install, clone, or vendor external repositories.
@@ -177,7 +190,7 @@ URL fetch text is not visual evidence. Follow `skills/masterminds-web-designer/r
 5. Treat a form as connected only after verifying a real endpoint and receiving user-confirmed send intent. Otherwise label it clearly as an unconnected local demo. Links navigate; they do not pretend to submit.
 6. For generated structured sites, offer the editor only as an opt-in. Run `edit-site.mjs --dir=SITE --port=INTEGER`, open only its exact printed private one-session URL, and verify text/image edits, save, undo, and reload. The editor owns validated `site.json` fields, never arbitrary HTML; external manual source changes are conflicts to preserve for review.
 7. Before audit, copy only participant-approved local images into the generated output. Remote images remain links and are not fetched automatically.
-8. Run `launch-check.mjs --dir=SITE --json` across the whole site. Fix hard failures, then manually inspect keyboard use, responsive behavior, form state, and performance. The check does not provide a ranking or guarantee SEO results.
+8. Run `modern-web.mjs check --dir=SITE` and explain each finding in plain words; fix confirmed ones. Then run `launch-check.mjs --dir=SITE --json` across the whole site. Fix hard failures, then manually inspect keyboard use, responsive behavior, form state, and performance. The check does not provide a ranking or guarantee SEO results.
 9. Once a changed page is on a public URL, run a PageSpeed check on every changed public page: the `pagespeed` skill when installed, otherwise Google PageSpeed Insights or Lighthouse. Report mobile and desktop scores and the top three fixes, fix failed accessibility and SEO audits, and re-run to show before and after. A single lab run is never proof of a regression or a win.
 10. Report local preview separately from publication or deployment. Never claim a browser check that was not observed.
 11. Record final assembled machine-readable acceptance evidence in `docs/verification.json`. Until that file exists and is current, do not infer every check passes.

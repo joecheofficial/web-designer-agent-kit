@@ -95,7 +95,7 @@ test('probe flags a plain HTML site and checks JSON errors when an API exists', 
 test('the web designer only offers agent readiness after launch', () => {
   const agent = readFileSync(new URL('../agents/web-designer.md', import.meta.url), 'utf8')
   const skill = readFileSync(new URL('../skills/agent-readiness/SKILL.md', import.meta.url), 'utf8')
-  assert.match(agent, /14\. Agent readiness \(post-launch only\)/)
+  assert.match(agent, /15\. Agent readiness \(post-launch only\)/)
   assert.match(agent, /Never raise this during the first build/)
   assert.match(skill, /^---\nname: agent-readiness\n/)
   assert.match(skill, /Not on the first build/)

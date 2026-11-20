@@ -8,6 +8,12 @@ kg:
 ---
 # Changelog
 
+## 5.6.0 (2026-11-21)
+
+- Your Web Designer now follows Google Chrome's Modern Web Guidance, the up-to-date rulebook for website code kept by the Chrome, Edge, Firefox and MDN teams. Before it writes a pop-up, menu, form, animation or similar, it looks up today's recommended way to build it, so your site uses what browsers do natively instead of old workarounds.
+- New "check my site" step: `node "$KIT_ROOT/scripts/modern-web.mjs" check "--dir=<your site>"` scans any site for outdated code and explains each finding in plain words, with the file and line. It never changes files; the designer fixes only what you approve. Prompt 12 (Check My Site) is ready to paste.
+- Needs Node.js 22 or newer and downloads the pinned rulebook (`modern-web-guidance@1.0.1`) from npm once. On older Node it skips with a plain note, and offline it says it could not run; either way nothing else changes. Its usage telemetry is always switched off. Licence details are in `THIRD-PARTY-NOTICES.md`.
+
 ## 5.5.2 (2026-10-29)
 
 - `scripts/agent-readiness.mjs` sets `process.exitCode` instead of calling `process.exit()`, so piped output (score and gap list) is no longer cut off.
