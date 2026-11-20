@@ -1,6 +1,6 @@
 {
   "name": "web-designer-agent-kit",
-  "version": "5.5.2",
+  "version": "5.6.0",
   "private": false,
   "type": "module",
   "engines": {
@@ -13,6 +13,7 @@
     "install:context": "node scripts/install-context.mjs",
     "health": "node scripts/health-check.mjs",
     "test": "node --test tests/*.test.mjs",
-    "update": "node scripts/update-kit.mjs"
+    "update": "node scripts/update-kit.mjs",
+    "check:modern-web": "node scripts/modern-web.mjs check"
   }
 }

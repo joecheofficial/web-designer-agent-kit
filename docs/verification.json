@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "kitVersion": "5.5.2",
+  "kitVersion": "5.6.0",
   "status": "source_tests_passed",
-  "verificationStatus": "5.5.2 core Node tests rerun: 80 passed, 0 failed. Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
+  "verificationStatus": "5.6.0 core Node tests rerun: 88 passed, 0 failed on Node 24 (including the opt-in live Modern Web Guidance scan, MWG_LIVE=1); 87 passed, 1 skipped (live scan) on Node 22. Browser and research workflow evidence is inherited from 5.1.0; fresh archive installation is recorded separately at release time.",
   "inheritedFromVersion": "5.1.0",
   "priorVersionEvidence": "docs/verification-v4.json",
   "coreNodeTests": {
-    "passed": 69,
+    "passed": 88,
     "failed": 0,
-    "observedKitVersion": "5.5.2",
-    "runtime": "Node 24"
+    "observedKitVersion": "5.6.0",
+    "runtime": "Node 24 and Node 22"
   },
   "research": {
     "primarySources": 40,
@@ -34,7 +34,7 @@
     "hashMismatchDominant": true
   },
   "editorImagePolicy": "Unsupported local formats rejected before writes with preservation and raster conversion guidance",
-  "scope": "5.5.0 to 5.5.2 add the agent-readiness skill and scripts/agent-readiness.mjs (live probe plus Is Agentic scoring, with retries and unbuffered output), proven on six production sites at 100/100. 5.4.1 adds the mobile video rule (documentation only, no script changes). 5.4.0 added the motion-recipes reference (documentation only, no script changes). 5.3.1 removed the 5.3.0 safety skills install and keeps the 5.2.0 PageSpeed step, update-kit and prompts 10 and 11. Unchanged design tools retain explicitly inherited evidence.",
+  "scope": "5.6.0 adds Modern Web Guidance (scripts/modern-web.mjs pinned to modern-web-guidance@1.0.1, telemetry off, Node 22+ with a clean skip): guidance lookup before writing site code and a read-only check-my-site legacy scan explained in plain words; the live scan was observed finding a sign-in autocomplete gap and webkit scrollbar styling in a fixture site. 5.5.0 to 5.5.2 add the agent-readiness skill and scripts/agent-readiness.mjs (live probe plus Is Agentic scoring, with retries and unbuffered output), proven on six production sites at 100/100. 5.4.1 adds the mobile video rule (documentation only, no script changes). 5.4.0 added the motion-recipes reference (documentation only, no script changes). 5.3.1 removed the 5.3.0 safety skills install and keeps the 5.2.0 PageSpeed step, update-kit and prompts 10 and 11. Unchanged design tools retain explicitly inherited evidence.",
   "sectionsBrowser": {
     "captures": 108,
     "viewports": [

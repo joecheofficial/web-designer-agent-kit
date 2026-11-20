@@ -17,6 +17,7 @@ export const REQUIRED_ASSETS = [
   'skills/masterminds-web-designer/references/copy-cleanup.md',
   'skills/masterminds-web-designer/references/design-directions.md',
   'skills/masterminds-web-designer/references/layout-atlas.md',
+  'skills/masterminds-web-designer/references/modern-web-guidance.md',
   'skills/masterminds-web-designer/references/reference-layout.md',
 ]
 
